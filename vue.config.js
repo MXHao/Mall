@@ -9,6 +9,7 @@ module.exports = {
             .set('@', resolve('src'))
             .set('components', resolve('src/components'))
             .set('network', resolve('src/network'))
+            .set('assets', resolve('src/assets'))
     },
     lintOnSave: false
 } 
