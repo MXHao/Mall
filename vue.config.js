@@ -8,6 +8,7 @@ module.exports = {
         config.resolve.alias
             .set('@', resolve('src'))
             .set('components', resolve('src/components'))
+            .set('network', resolve('src/network'))
     },
     lintOnSave: false
 } 

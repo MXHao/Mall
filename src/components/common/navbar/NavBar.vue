@@ -28,7 +28,7 @@
     display: flex;
     line-height: 44px;
     height: 44px;
-    background-color: rgba(199, 95, 112, 0.658)
+    background-color: rgb(0, 0, 0)
 }
  .left {
      width: 60px;
