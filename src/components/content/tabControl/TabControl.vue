@@ -29,6 +29,7 @@ export default {
   methods: {
     itemClick(index) {
       this.currentIndex = index;
+      this.$emit('TabClick', index)
     }
   },
   components: {}
@@ -40,8 +41,8 @@ export default {
   display: flex;
   text-align: center;
   background-color: #fff;
-  position: sticky;
-  top: 44px;
+  
+  
 }
 .tab-control-item {
   flex: 1;

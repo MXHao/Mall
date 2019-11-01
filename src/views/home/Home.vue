@@ -6,7 +6,8 @@
     <home-swiper :banner="banners" />
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
-    <tab-control :titles="['流行', '新款', '精品']"></tab-control>
+    <tab-control class="tab-control" :titles="['流行', '新款', '精品']" @TabClick="TabClick"></tab-control>
+    <goods-list :goods="showGoods"></goods-list>
     <ul>
       <li>列表</li>
       <li>列表</li>
@@ -109,24 +110,20 @@
       <li>列表</li>
       <li>列表</li>
     </ul>
-    <div v-for="item in goods">
-      <div>{{item}}</div>
-      <img src="item.show.img" alt="">
-
-    </div>
   </div>
 </template>
 
 <script>
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
-
 import HomeSwiper from "./childCpns/HomeSwiper";
 import RecommendView from "./childCpns/RecommendView";
-import FeatureView from "./childCpns/FeatureView"
+import FeatureView from "./childCpns/FeatureView";
 
 import NavBar from "components/common/navbar/NavBar";
-import TabControl from "components/content/tabControl/TabControl"
+import TabControl from "components/content/tabControl/TabControl";
+import GoodsList from "components/content/goods/GoodsList";
+
 export default {
   name: "Home",
   components: {
@@ -134,29 +131,34 @@ export default {
     HomeSwiper,
     RecommendView,
     FeatureView,
-    TabControl
+    TabControl,
+    GoodsList
   },
   data() {
     return {
       banners: [],
       recommends: [],
       goods: {
-        'pop': {page: 0, list: []},
-        'new': {page: 0, list: []},
-        'sell': {page: 0, list: []}
-
-      }
+        pop: { page: 0, list: [] },
+        new: { page: 0, list: [] },
+        sell: { page: 0, list: [] }
+      },
+      currentType: "pop"
     };
   },
   created() {
-      this.getHomeMultidata()
-      this.getHomeGoods('pop')
-      this.getHomeGoods('new')
-      this.getHomeGoods('sell')
-
-
+    this.getHomeMultidata();
+    this.getHomeGoods("pop");
+    this.getHomeGoods("new");
+    this.getHomeGoods("sell");
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list
+    } 
   },
   methods: {
+    //网络请求相关
     getHomeMultidata() {
       getHomeMultidata().then(res => {
         console.log(res);
@@ -165,14 +167,28 @@ export default {
       });
     },
     getHomeGoods(type) {
-      const page = this.goods[type].page + 1
+      const page = this.goods[type].page + 1;
       getHomeGoods(type, page).then(res => {
-        this.goods[type].list.push(...res.data.list)
-        this.goods[type].page +=1
-        console.log(this.goods[type].list[0].show.img)
-      })
+        this.goods[type].list.push(...res.data.list);
+        this.goods[type].page += 1;
+        console.log(this.goods[type].list[0].show.img);
+      });
+    },
+    // 事件相关
+    TabClick(index) {
+      console.log(index);
+      switch (index) {
+        case 0:
+          this.currentType = "pop";
+          break;
+        case 1:
+          this.currentType = "new";
+          break;
+        case 2:
+          this.currentType = "sell";
+          break;
+      }
     }
-    
   }
 };
 </script>
@@ -185,11 +201,15 @@ export default {
   right: 0;
   background-color: rgb(0, 0, 0);
   color: #fff;
-  z-index: 9
+  z-index: 9;
 }
 #home {
   padding-top: 44px;
   padding-bottom: 50px;
 }
-
+.tab-control {
+  z-index: 9;
+  position: sticky;
+  top: 44px;
+}
 </style>
