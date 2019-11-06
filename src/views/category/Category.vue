@@ -1,6 +1,6 @@
 <template>
-<h2>
-  <ul>
+<div class="wrapper">
+  <ul class="content">
     <li>分类列表1</li>
     <li>分类列表2</li>
     <li>分类列表3</li>
@@ -102,16 +102,51 @@
     <li>分类列表99</li>
     <li>分类列表100</li>
   </ul>
-</h2>
+</div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
  export default {
-   name: 'Category'
+   name: 'Category',
+   data() {
+     return {
+       scroll: null
+     }
+   },
+   created() {
+     
+   },
+   mounted() {
+     this.scroll = new BScroll(document.querySelector('.wrapper'), {
+       probeType: 3,//实时监听位置
+       click: true,//监听点击
+       pullUpLoad: true//监听滑动到底部
+     });
+     this.scroll.on('scroll', (position) => {
+      //  console.log(position)
+     })
+     this.scroll.on('pullingUp', () => {
+       console.log('上拉加载更多')
+       //发送网络请求
+       //等数据请求完并加载完后
+       setTimeout(() => {
+         this.scroll.finishPullUp()
+       }, 2000);
+     })
+   },
+   methods: {
+     
+   }
  }
 </script>
 
 <style scoped>
-
+.wrapper {
+  height: 150px;
+  background-color: red;
+  overflow: hidden;
+  /* overflow-y: scroll */
+}
  
 </style>
